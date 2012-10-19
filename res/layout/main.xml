@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent">
+
+
+ 
+  <!-- Button
+    android:id="@+id/button_capture"
+    android:text="Capture"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    / -->
+    
+   <org.duchessfrance.duchessdroid.PreviewView android:id="@+id/preview_view"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:layout_centerInParent="true" 
+               android:keepScreenOn="true" />
+
+   <org.duchessfrance.duchessdroid.DrawView
+      android:id="@+id/draw_view"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:background="@color/transparent" android:keepScreenOn="true"/>
+ 
+   <ImageView  
+      	android:id="@+id/duchess_view"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent" 
+    
+        android:scaleType="center"
+        android:src="@drawable/duchessfr" />
+    
+    
+</FrameLayout>
