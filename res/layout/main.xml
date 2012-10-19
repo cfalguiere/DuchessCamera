@@ -25,13 +25,13 @@
       android:layout_height="fill_parent"
       android:background="@color/transparent" android:keepScreenOn="true"/>
  
-   <ImageView  
+   <!--   ImageView  
       	android:id="@+id/duchess_view"
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent" 
     
         android:scaleType="center"
-        android:src="@drawable/duchessfr" />
+        android:src="@drawable/duchessfr" / -->
     
     
 </FrameLayout>

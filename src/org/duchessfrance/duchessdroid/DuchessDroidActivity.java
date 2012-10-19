@@ -2,6 +2,7 @@ package org.duchessfrance.duchessdroid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.net.Uri;
@@ -12,6 +13,8 @@ import android.widget.ImageView;
 public class DuchessDroidActivity extends Activity {
     DrawView mDrawView;
     PreviewView mPreviewView;
+    
+    private Duchess duchess;
 
 /*    CameraPreview mCameraPreview;
 
@@ -48,7 +51,12 @@ public class DuchessDroidActivity extends Activity {
 
 		setContentView(R.layout.main);
 
+        // create duchess and load bitmap
+        duchess = new Duchess(BitmapFactory.decodeResource(getResources(), 
+        		R.drawable.duchessfr), 150, 150); //TODO actual size of the screen
+
 		mDrawView = (DrawView) findViewById(R.id.draw_view);
+		mDrawView.duchess = duchess;
 		
 		mPreviewView = (PreviewView) findViewById(R.id.preview_view);
 		mPreviewView.mTargetView = mDrawView;
