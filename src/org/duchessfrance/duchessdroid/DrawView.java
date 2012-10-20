@@ -1,7 +1,6 @@
 package org.duchessfrance.duchessdroid;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,17 +9,19 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-
-//TODO tourner duchess
 
 public class DrawView extends ImageView {
 
     private static final String TAG = DrawView.class.getSimpleName();
 
 	public Duchess duchess;
+	
+	public enum Action {
+	    NONE, ONGOING, MOVING, ROTATING 
+	};
+	private Action action = Action.NONE;
 
 	public DrawView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -32,12 +33,29 @@ public class DrawView extends ImageView {
 	@Override
 	public void onDraw(Canvas canvas) {
 
-		Paint mPaint = new Paint();
-		mPaint.setColor(Color.WHITE);
-		canvas.drawText("Test", 0, 50, mPaint);
+		//Paint paint = new Paint();
+		//mPaint.setColor(Color.WHITE);
+		//canvas.drawText("Test", 0, 50, paint);
 
 		duchess.draw(canvas);
+		
+		switch(action) {
+		case MOVING :
+			drawMovingFeedback(canvas);
+			break;
+		default :
+			break;
+		}
 
+	}
+	
+	private void drawMovingFeedback(Canvas canvas) {
+		Paint paint = new Paint();
+		paint.setColor(Color.GREEN);
+		paint.setAlpha(128);
+		int radius = duchess.getBitmap().getWidth() / 4;
+		canvas.drawCircle(duchess.getX(), duchess.getY(), 
+				radius, paint);
 	}
 	
     @Override
@@ -45,28 +63,35 @@ public class DrawView extends ImageView {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             // delegating event handling to the duchess
             duchess.handleActionDown((int)event.getX(), (int)event.getY());
-            Log.d(TAG,"down");
+        	action = Action.ONGOING;
+        	Log.d(TAG,"down");
          } if (event.getAction() == MotionEvent.ACTION_MOVE) {
             // the gestures
             if (duchess.isTouched()) {
+            	action = Action.MOVING;
                 // the duchess was picked up and is being dragged
             	duchess.setX((int)event.getX());
             	duchess.setY((int)event.getY());
             	invalidate();
                 Log.d(TAG,"move");
            } else {
-        	    double angdeg = getDegreesFromTouchEvent(event.getX(), event.getY());
-           		duchess.setAngdeg(angdeg);
+        	   action = Action.ROTATING;
+        	   double angdeg = getDegreesFromTouchEvent(event.getX(), event.getY());
+        	   duchess.setAngdeg(angdeg);
         	   invalidate();
-            Log.d(TAG,"move");
-              Log.d(TAG,"rotate");
+        	   Log.d(TAG,"rotate");
            }
         } if (event.getAction() == MotionEvent.ACTION_UP) {
-            // touch was released
-            if (duchess.isTouched()) {
-            	duchess.setTouched(false);
-                Log.d(TAG,"up");
-            }
+         	Log.d(TAG,"up");
+        	if (action != Action.NONE) {
+         	   invalidate();
+        	}
+        	action = Action.NONE;
+        	// touch was released
+        	if (duchess.isTouched()) {
+        		duchess.setTouched(false);
+        	}
+        	
         }
         return true;
     }
