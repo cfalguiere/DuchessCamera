@@ -22,7 +22,8 @@
       android:id="@+id/draw_view"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:background="@color/transparent" android:keepScreenOn="true"/>
+      android:background="@color/transparent" 
+      android:keepScreenOn="true"/>
  
    <!--   ImageView  
       	android:id="@+id/duchess_view"

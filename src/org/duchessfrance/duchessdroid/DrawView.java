@@ -1,13 +1,17 @@
 package org.duchessfrance.duchessdroid;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 //TODO tourner duchess
@@ -31,6 +35,7 @@ public class DrawView extends ImageView {
 		Paint mPaint = new Paint();
 		mPaint.setColor(Color.WHITE);
 		canvas.drawText("Test", 0, 50, mPaint);
+
 		duchess.draw(canvas);
 
 	}
@@ -48,7 +53,13 @@ public class DrawView extends ImageView {
             	duchess.setX((int)event.getX());
             	duchess.setY((int)event.getY());
             	invalidate();
-                //Log.d(TAG,"move");
+                Log.d(TAG,"move");
+           } else {
+        	    double angdeg = getDegreesFromTouchEvent(event.getX(), event.getY());
+           		duchess.setAngdeg(angdeg);
+        	   invalidate();
+            Log.d(TAG,"move");
+              Log.d(TAG,"rotate");
            }
         } if (event.getAction() == MotionEvent.ACTION_UP) {
             // touch was released
@@ -60,5 +71,26 @@ public class DrawView extends ImageView {
         return true;
     }
  
+    private double getDegreesFromTouchEvent(float x, float y){
+		double delta_x = x - duchess.getX();
+        double delta_y = duchess.getY() - y;
+        double radians = Math.atan2(delta_y, delta_x);
 
+        return Math.toDegrees(Math.PI*2 - radians);
+    }
+
+    private double getDegreesFromTouchEvent2(float x, float y){
+    	WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+		int height = size.y;
+		//TODO factorize
+		double delta_x = x - (width) /2;
+        double delta_y = (height) /2 - y;
+        double radians = Math.atan2(delta_y, delta_x);
+
+        return Math.toDegrees(radians);
+    }
 }

@@ -1,26 +1,27 @@
 package org.duchessfrance.duchessdroid;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.net.Uri;
-
 import android.util.Log;
 import android.view.Display;
 import android.view.Window;
-import android.widget.ImageView;
 
 public class DuchessDroidActivity extends Activity {
-    DrawView mDrawView;
-    PreviewView mPreviewView;
-    
-    private Duchess duchess;
+	private static final String TAG = DuchessDroidActivity.class.getSimpleName();
 
-    private static final String TAG = DuchessDroidActivity.class.getSimpleName();
+	DrawView mDrawView;
+	PreviewView mPreviewView;
+	Duchess duchess;
+ 
+    private static SensorManager sensorManager;
+    private OrientationSensorEventListener osel;
+    
+
 
 /*    CameraPreview mCameraPreview;
 
@@ -49,37 +50,70 @@ public class DuchessDroidActivity extends Activity {
 */
     
     /** Called when the activity is first created. */
-	
+
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		Log.d(TAG, "Entering onCreate");
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+    protected void onCreate(Bundle savedInstanceState) {
+    	super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.main);
-		
-		Display display = getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		int width = size.x;
-		int height = size.y;
+    	Log.d(TAG, "Entering onCreate");
+    	requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        // create duchess and load bitmap
-        duchess = new Duchess(
-        		BitmapFactory.decodeResource(getResources(), R.drawable.duchessfr), 
-        		width*2/3, height*2/3); //TODO actual size of the screen
-        
+    	setContentView(R.layout.main);
 
-		mDrawView = (DrawView) findViewById(R.id.draw_view);
-		mDrawView.duchess = duchess;
-		
-		mPreviewView = (PreviewView) findViewById(R.id.preview_view);
-		mPreviewView.mTargetView = mDrawView;
-		//mPreviewView.mTargetView = iv;
-		//preview.addView(cp); //cp is a reference to a camera preview object
-		//preview.addView(iv);
-	
-	}
+    	Display display = getWindowManager().getDefaultDisplay();
+    	Point size = new Point();
+    	display.getSize(size);
+    	int width = size.x;
+    	int height = size.y;
+    	
+    	setupSensor();
+    	
+    	// create duchess and load bitmap
+    	duchess = new Duchess(
+    			BitmapFactory.decodeResource(getResources(), R.drawable.duchessfr), 
+    			width*2/3, height*2/3); //TODO actual size of the screen
 
+
+    	mDrawView = (DrawView) findViewById(R.id.draw_view);
+    	mDrawView.duchess = duchess;
+
+    	mPreviewView = (PreviewView) findViewById(R.id.preview_view);
+    	mPreviewView.mTargetView = mDrawView;
+    }
+
+
+    /** Register for the updates when Activity is in foreground */
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	Log.d(TAG, "onResume");
+    	setupSensor(); 
+    }
+
+    /** Stop the updates when Activity is paused */
+    @Override
+    protected void onPause() {
+    	super.onPause();
+    	Log.d(TAG, "onPause");
+    	//sensorManager.unregisterListener(this, sensor);
+    	sensorManager.unregisterListener(osel);
+    }
+
+    @Override
+    protected void onDestroy() {
+    	// TODO Auto-generated method stub
+    	super.onDestroy();
+
+    		sensorManager.unregisterListener(osel);
+    } 
+    
+    private void setupSensor() {
+    	sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+    	sensorManager.registerListener(osel, 
+    			sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), // Anonymous Sensors- no further use for them. 
+    			SensorManager.SENSOR_DELAY_UI); 
+    	sensorManager.registerListener(osel, 
+    			sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
+    			SensorManager.SENSOR_DELAY_UI); 
+    }
 }
