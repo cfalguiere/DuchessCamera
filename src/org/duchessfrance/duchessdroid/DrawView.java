@@ -38,17 +38,17 @@ public class DrawView extends ImageView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            // delegating event handling to the droid
+            // delegating event handling to the duchess
             duchess.handleActionDown((int)event.getX(), (int)event.getY());
             Log.d(TAG,"down");
          } if (event.getAction() == MotionEvent.ACTION_MOVE) {
             // the gestures
             if (duchess.isTouched()) {
-                // the droid was picked up and is being dragged
+                // the duchess was picked up and is being dragged
             	duchess.setX((int)event.getX());
             	duchess.setY((int)event.getY());
             	invalidate();
-                Log.d(TAG,"move");
+                //Log.d(TAG,"move");
            }
         } if (event.getAction() == MotionEvent.ACTION_UP) {
             // touch was released
