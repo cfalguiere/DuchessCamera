@@ -22,7 +22,7 @@ public class DrawView extends ImageView {
 		super(context, attrs);
         // make the GamePanel focusable so it can handle events
         setFocusable(true);
-
+        setFocusableInTouchMode(true);
 	}
 
 	@Override
@@ -47,11 +47,14 @@ public class DrawView extends ImageView {
                 // the droid was picked up and is being dragged
             	duchess.setX((int)event.getX());
             	duchess.setY((int)event.getY());
-            }
+            	invalidate();
+                Log.d(TAG,"move");
+           }
         } if (event.getAction() == MotionEvent.ACTION_UP) {
             // touch was released
             if (duchess.isTouched()) {
             	duchess.setTouched(false);
+                Log.d(TAG,"up");
             }
         }
         return true;
