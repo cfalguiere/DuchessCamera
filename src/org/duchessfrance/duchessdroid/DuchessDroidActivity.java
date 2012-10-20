@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.net.Uri;
 
+import android.util.Log;
 import android.view.Window;
 import android.widget.ImageView;
 
@@ -15,6 +16,8 @@ public class DuchessDroidActivity extends Activity {
     PreviewView mPreviewView;
     
     private Duchess duchess;
+
+    private static final String TAG = DuchessDroidActivity.class.getSimpleName();
 
 /*    CameraPreview mCameraPreview;
 
@@ -47,13 +50,16 @@ public class DuchessDroidActivity extends Activity {
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Log.d(TAG, "Entering onCreate");
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.main);
 
         // create duchess and load bitmap
-        duchess = new Duchess(BitmapFactory.decodeResource(getResources(), 
-        		R.drawable.duchessfr), 150, 150); //TODO actual size of the screen
+        duchess = new Duchess(
+        		BitmapFactory.decodeResource(getResources(), R.drawable.duchessfr), 
+        		200, 200); //TODO actual size of the screen
 
 		mDrawView = (DrawView) findViewById(R.id.draw_view);
 		mDrawView.duchess = duchess;

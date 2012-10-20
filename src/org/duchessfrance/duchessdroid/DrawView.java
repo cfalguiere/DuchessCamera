@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+//TODO tourner duchess
+
 public class DrawView extends ImageView {
 
     private static final String TAG = DrawView.class.getSimpleName();
@@ -38,6 +40,7 @@ public class DrawView extends ImageView {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             // delegating event handling to the droid
             duchess.handleActionDown((int)event.getX(), (int)event.getY());
+            Log.d(TAG,"down");
          } if (event.getAction() == MotionEvent.ACTION_MOVE) {
             // the gestures
             if (duchess.isTouched()) {
