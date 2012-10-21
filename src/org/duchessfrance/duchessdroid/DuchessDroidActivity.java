@@ -157,6 +157,14 @@ public class DuchessDroidActivity extends Activity {
     	}
     }
 
+    public void whenRotate(View view) {
+//TODO
+    }
+
+    public void whenDrag(View view) {
+//TODO
+    }
+
     // unused
     private void setupSensor() {
     	sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);

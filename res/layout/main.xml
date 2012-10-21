@@ -3,16 +3,6 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent">
 
-
- 
-  <!-- Button
-    android:id="@+id/button_capture"
-    android:text="Capture"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    / -->
-    
    <org.duchessfrance.duchessdroid.PreviewView android:id="@+id/preview_view"
                android:layout_width="fill_parent"
                android:layout_height="fill_parent"
@@ -25,42 +15,50 @@
       android:background="@color/transparent" 
       android:keepScreenOn="true"/>
  
- 
-       
    <Button
-      android:id="@+id/save_button"
-     android:layout_height="wrap_content"
-     android:layout_width="wrap_content"
-   android:layout_gravity="bottom|right" 
-    android:layout_marginBottom="10dp"
-    android:text="@string/button_text_save"
-     android:onClick="whenSave" />
-   
+       android:id="@+id/save_button"
+       android:layout_width="30dp"
+       android:layout_height="30dp"
+       android:layout_gravity="bottom|right"
+       android:layout_marginRight="10dp"
+       android:background="@drawable/camera_icon"
+       android:onClick="whenSave" />
+
    <Button
-      android:id="@+id/scale_up_button"
-     android:layout_height="wrap_content"
-     android:layout_width="wrap_content"
-   android:layout_gravity="bottom|right" 
-    android:layout_marginBottom="100dp"
-     android:text="@string/button_text_scale_up"
-     android:onClick="whenScaleUp" />
-   
-      <Button
-      android:id="@+id/scale_down_button"
-     android:layout_height="wrap_content"
-     android:layout_width="wrap_content"
-   android:layout_gravity="bottom|right" 
-    android:layout_marginBottom="200dp"
-     android:text="@string/button_text_scale_down"
-     android:onClick="whenScaleDown" />
-   
-   <!--   ImageView  
-      	android:id="@+id/duchess_view"
-        android:layout_width="fill_parent" 
-        android:layout_height="fill_parent" 
-    
-        android:scaleType="center"
-        android:src="@drawable/duchessfr" / -->
+        android:id="@+id/scale_up_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="50dp"
+        android:background="@drawable/plus_icon_s"
+        android:onClick="whenScaleUp" />
+
+    <Button
+        android:id="@+id/scale_down_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="90dp"
+        android:background="@drawable/minus_icon"
+        android:onClick="whenScaleDown" />
+
+    <Button
+        android:id="@+id/drag_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="130dp"
+        android:background="@drawable/drag_icon"
+        android:onClick="whenDrag" />
+
+    <Button
+        android:id="@+id/rotate_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="170dp"
+        android:background="@drawable/rotate_icon"
+        android:onClick="whenRotate" />
     
     
 </FrameLayout>
