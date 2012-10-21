@@ -143,8 +143,8 @@ public class DuchessDroidActivity extends Activity {
 
     public void whenScaleDown(View view) {
     	float currentScale = duchess.getScale();
-    	if (currentScale>2) {
-    		duchess.setScale(currentScale - 1);
+    	if (currentScale>1) {
+    		duchess.setScale(currentScale - 0.5f);
     		mDrawView.invalidate();
     	}
     }
@@ -152,7 +152,7 @@ public class DuchessDroidActivity extends Activity {
     public void whenScaleUp(View view) {
     	float currentScale = duchess.getScale();
     	if (currentScale<4) {
-    		duchess.setScale(currentScale + 1);
+    		duchess.setScale(currentScale + 0.5f);
     		mDrawView.invalidate();
     	}
     }
