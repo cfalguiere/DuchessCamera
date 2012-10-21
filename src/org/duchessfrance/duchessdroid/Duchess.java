@@ -82,18 +82,17 @@ public class Duchess {
 		this.touched = touched;
 	}
 
-	public void draw(Canvas canvas) {
+	public void draw(Canvas canvas, float ratio) {
 		Log.d(TAG, "redraw duchess with rotation " + rotation);
 		Matrix matrix = new Matrix();
-//		matrix.setRotate((float)angdeg /*rotation*/, bitmap.getWidth()/2,
-//				bitmap.getHeight()/2);
-		matrix.setScale(scale, scale, bitmap.getWidth()/2, bitmap.getHeight()/2);
-		matrix.postRotate((float)angdeg /*rotation*/, bitmap.getWidth()/2,
-				bitmap.getHeight()/2);
-		matrix.postTranslate(x - bitmap.getWidth()/2,
-				y - bitmap.getHeight()/2);
-		canvas.drawBitmap(bitmap, matrix, null /*new Paint()*/);
-		   
+		float s = scale * ratio;
+		int cw = Math.round(bitmap.getWidth() * ratio / 2);
+		int ch = Math.round(bitmap.getHeight() * ratio / 2);
+		matrix.setScale(s, s, cw, ch);
+		matrix.postRotate((float)angdeg /*rotation*/, cw, ch);
+		matrix.postTranslate((x - bitmap.getWidth()) * ratio, 
+				(y - bitmap.getHeight()) * ratio);
+		canvas.drawBitmap(bitmap, matrix, null /*new Paint()*/);		   
 	}
 
 	public void handleActionDown(int eventX, int eventY) {

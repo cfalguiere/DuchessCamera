@@ -27,10 +27,16 @@ public class DrawView extends ImageView {
 	private Action mode = Action.NONE;
 
 	private float mScaleFactor = 1.0f;
+	
 	//TODO setup multi touch for scaling - need fix interaction with single touch
 	//private /*Scale*/GestureDetector mScaleDetector;
 	//private ScaleListener scaleListener;
 
+	private Paint dragPaint = new Paint();
+	private Paint rotatePaint = new Paint();
+	private Paint zoomPaint = new Paint();
+	int rotateFeedbackRadius;
+	
 	public DrawView(Context context, AttributeSet attrs) {
 		super(context, attrs);
         // make the Panel focusable so it can handle events
@@ -42,6 +48,21 @@ public class DrawView extends ImageView {
         //mScaleDetector = new /*Scale*/GestureDetector(context, scaleListener);
  
 	}
+	
+	private void initializePainters() {
+		dragPaint = new Paint();
+		dragPaint.setColor(Color.GREEN);
+		dragPaint.setAlpha(128);
+
+		rotatePaint = new Paint();
+		rotatePaint.setColor(Color.GREEN);
+		rotatePaint.setAlpha(128);
+		int offset = 40;
+		rotatePaint.setStrokeWidth(offset);
+		rotatePaint.setStyle(Style.STROKE);
+		rotateFeedbackRadius = duchess.getBitmap().getWidth() / 2 + offset;
+
+	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
@@ -51,7 +72,7 @@ public class DrawView extends ImageView {
 		//canvas.drawText("Test", 0, 50, paint);
 		canvas.scale(mScaleFactor, mScaleFactor);
 
-		duchess.draw(canvas);
+		duchess.draw(canvas, 1);
 		
 		switch(mode) {
 		case DRAG :
@@ -59,9 +80,6 @@ public class DrawView extends ImageView {
 			break;
 		case ROTATE :
 			drawRotateFeedback(canvas);
-			break;
-		case ZOOM :
-			drawZoomFeedback(canvas);
 			break;
 		default :
 			break;
@@ -71,37 +89,16 @@ public class DrawView extends ImageView {
 	}
 	
 	private void drawDragFeedback(Canvas canvas) {
-		Paint paint = new Paint();
-		paint.setColor(Color.GREEN);
-		paint.setAlpha(128);
 		int radius = duchess.getBitmap().getWidth() / 4;
 		canvas.drawCircle(duchess.getX(), duchess.getY(), 
-				radius, paint);
+				radius, dragPaint);
 	}
 	
 	private void drawRotateFeedback(Canvas canvas) {
-		Paint paint = new Paint();
-		paint.setColor(Color.GREEN);
-		paint.setAlpha(128);
-		int offset = 40;
-		paint.setStrokeWidth(offset);
-		paint.setStyle(Style.STROKE);
-		int radius = duchess.getBitmap().getWidth() / 2 + offset;
 		canvas.drawCircle(duchess.getX(), duchess.getY(), 
-				radius, paint);
+				rotateFeedbackRadius, rotatePaint);
 	}
 
-	private void drawZoomFeedback(Canvas canvas) {
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setAlpha(128);
-		int offset = 20;
-		paint.setStrokeWidth(offset);
-		paint.setStyle(Style.STROKE);
-		int radius = duchess.getBitmap().getWidth() / 2 + offset;
-		canvas.drawCircle(duchess.getX(), duchess.getY(), 
-				radius, paint);
-	}
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -144,7 +141,9 @@ public class DrawView extends ImageView {
     	    		duchess.setTouched(false);
     	    	}
     	    	break;
-    	    }        	
+    	    }   
+    	    
+    	    // TODO pointer management for multitouch
         }
         return true;
     }
@@ -155,20 +154,6 @@ public class DrawView extends ImageView {
         double radians = Math.atan2(delta_y, delta_x);
 
         return Math.toDegrees(Math.PI*2 - radians);
-    }
-
-    private double getDegreesFromTouchEvent2(float x, float y){
-    	WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-		Display display = wm.getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		int width = size.x;
-		int height = size.y;
-		double delta_x = x - (width) /2;
-        double delta_y = (height) /2 - y;
-        double radians = Math.atan2(delta_y, delta_x);
-
-        return Math.toDegrees(radians);
     }
     
     // accessors and mutators

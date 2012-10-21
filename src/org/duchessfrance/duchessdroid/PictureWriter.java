@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,21 +18,24 @@ import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class PictureWriter implements PictureCallback {
 
 	private static final String TAG = PictureWriter.class.getSimpleName();
 
-	private ImageView mResultView;
 	private Activity mActivity;
-	private DrawView mDrawView;
+	private Duchess mDuchess;
+	private ImageView mResultView;
 
-	public PictureWriter(Activity pActivity, DrawView pDrawView, ImageView pResultView) {
+	public PictureWriter(Activity pActivity, Duchess pDuchess, ImageView pResultView) {
 		mResultView = pResultView;
 		mActivity = pActivity;
-		mDrawView = pDrawView;
+		mDuchess = pDuchess;
 	}
 
 	public void onPictureTaken(byte[] data, Camera camera) {
@@ -48,7 +52,13 @@ public class PictureWriter implements PictureCallback {
 		canvas.drawBitmap(photo, 0, 0, null);	    	   
 
 		// Draw Duchess view
-		mDrawView.draw(canvas);
+		DisplayMetrics metrics = new DisplayMetrics();
+		((WindowManager) mActivity.getSystemService(Context.WINDOW_SERVICE))
+		  .getDefaultDisplay().getMetrics(metrics);
+
+
+		float ratio = (float) photo.getHeight() / (float) metrics.heightPixels;
+		mDuchess.draw(canvas, ratio);
 
 		try {
 			File pictureFile = getOutputMediaFile();
@@ -64,7 +74,6 @@ public class PictureWriter implements PictureCallback {
 				Log.d(TAG, "Could not write bitmap to file");
 			}
 
-			//fos.write(data);
 			fos.flush();
 			fos.close();
 

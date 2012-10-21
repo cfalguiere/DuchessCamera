@@ -1,33 +1,16 @@
 package org.duchessfrance.duchessdroid;
 	
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
-import android.net.Uri;
-import android.os.Environment;
+import android.hardware.Camera.Size;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ImageView;
 
 // TODO
 /*
@@ -36,75 +19,133 @@ Note: A camera preview does not have to be in landscape mode. Starting in Androi
 public class PreviewView extends SurfaceView implements SurfaceHolder.Callback{
 	private static final String TAG = PreviewView.class.getSimpleName();
 
-   SurfaceHolder mHolder;
-   Camera mCamera;
-   
-   boolean mPreviewRunning =false;
-  public  boolean isScanning =false;
+	SurfaceHolder mHolder;
+	Camera mCamera;
 
-  public  boolean isEditingEtalan =false;
-  
-  private Uri imageUri;
-  public static final int MEDIA_TYPE_IMAGE = 1;
-  private static final int IMAGE_CAPTURE = 1234; 
+	boolean mIsPreviewRunning = false;
+	public  boolean isScanning = false;
+
+	public  boolean isEditingEtalan = false;
+
+	public static final int MEDIA_TYPE_IMAGE = 1;
 
 
-  DrawView mTargetView;
+	DrawView mTargetView;
+	MaskView mMaskView;
 
-     public PreviewView(Context context, AttributeSet attrs) {
-       super(context,attrs);
-       mHolder = getHolder();
-       mHolder.addCallback(this);
-       //mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-   }
-     
+	public PreviewView(Context context, AttributeSet attrs) {
+		super(context,attrs);
+		mHolder = getHolder();
+		mHolder.addCallback(this);
+		//mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+	}
 
-   
-   public void surfaceCreated(SurfaceHolder holder) {
-       mCamera = Camera.open();
-       try {
-          mCamera.setPreviewDisplay(holder);
-          mPreviewRunning=true;
-       } catch (IOException exception) {
-           mCamera.release();
-           mCamera = null;
-       }
-   }
 
-   public void surfaceDestroyed(SurfaceHolder holder) {
-       mCamera.stopPreview();
-       mPreviewRunning=false;
-       mCamera.release();
-       mCamera = null;
-   }
 
-   
-   public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+	public void surfaceCreated(SurfaceHolder holder) {
+		mCamera = Camera.open();
+		try {
+			mCamera.setPreviewDisplay(holder);
+			mIsPreviewRunning=true;
+		} catch (IOException exception) {
+			mCamera.release();
+			mCamera = null;
+		}
+	}
 
-       if (mHolder.getSurface() == null){
-         // preview surface does not exist
-         return;
-       }
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		mCamera.stopPreview();
+		mIsPreviewRunning=false;
+		mCamera.release();
+		mCamera = null;
+	}
 
-       // stop camera preview
-       if (mPreviewRunning) {
+
+	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+
+		if (mHolder.getSurface() == null){
+			// preview surface does not exist
+			return;
+		}
+
+		// stop camera preview
+		if (mIsPreviewRunning) {
 			mCamera.stopPreview();
-			mPreviewRunning=false;
-	   }
-      
-       // restart camera preview
-       Camera.Parameters parameters = mCamera.getParameters();
-       mTargetView.invalidate();
-       mCamera.setParameters(parameters);
-       mCamera.startPreview();
-       
-       mPreviewRunning=true;
-   }
+			mIsPreviewRunning=false;
+		}
 
-  
+		// restart camera preview
+		Camera.Parameters parameters = mCamera.getParameters();
+		Size p = mCamera.getParameters().getPreviewSize();
+		mMaskView.setPreviewSize(p);
+		mMaskView.invalidate();
+		//drawMask(holder, p, w, h);
 
-   public void takePicture(PictureCallback mJpegPictureCallback) {
-	   mCamera.takePicture(null, null, mJpegPictureCallback);
-   }
+		// work fine for display but captured image is not rotated 
+		// and also lags when rotating device*/
+		/*
+        Display display = ((WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+
+        if(display.getRotation() == Surface.ROTATION_0)
+        {
+            parameters.setPreviewSize(h, w);                           
+            mCamera.setDisplayOrientation(90);
+        }
+
+        if(display.getRotation() == Surface.ROTATION_90)
+        {
+            parameters.setPreviewSize(w, h);                           
+        }
+
+        if(display.getRotation() == Surface.ROTATION_180)
+        {
+            parameters.setPreviewSize(h, w);               
+        }
+
+        if(display.getRotation() == Surface.ROTATION_270)
+        {
+            parameters.setPreviewSize(w, h);
+            mCamera.setDisplayOrientation(180);
+        } */
+
+
+		mTargetView.invalidate();
+		mCamera.setParameters(parameters);
+		previewCamera();
+	}
+	
+	private void previewCamera()
+	{        
+	    try 
+	    {           
+	        mCamera.setPreviewDisplay(mHolder);          
+	        mCamera.startPreview();
+	        mIsPreviewRunning = true;
+	    }
+	    catch(Exception e)
+	    {
+	        Log.d(TAG, "Cannot start preview", e);    
+	    }
+	}
+/*
+	private void drawMask(SurfaceHolder holder, Size photoSize, int w, int h) {
+		if(holder.getSurface().isValid()){
+			Canvas canvas = holder.lockCanvas();
+			if (canvas!=null) {
+				Paint maskPaint = new Paint();
+				maskPaint.setColor(Color.rgb(0, 0, 0));
+				canvas.drawRect(photoSize.width, 0, w-photoSize.width, h, maskPaint);
+			}
+
+			holder.unlockCanvasAndPost(canvas);
+		}
+
+	}
+
+*/
+	
+	public void takePicture(PictureCallback mJpegPictureCallback) {
+		mCamera.takePicture(null, null, mJpegPictureCallback);
+	}
 
 }

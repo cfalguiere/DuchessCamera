@@ -41,6 +41,7 @@ public class DuchessDroidActivity extends Activity {
 
 	DrawView mDrawView;
 	PreviewView mPreviewView;
+	MaskView mMaskView;
 	Duchess duchess;
     private ImageView imageView;
 
@@ -82,7 +83,11 @@ public class DuchessDroidActivity extends Activity {
     	
     	mPreviewView = (PreviewView) findViewById(R.id.preview_view);
     	mPreviewView.mTargetView = mDrawView;
+    	mPreviewView.mMaskView  = (MaskView) findViewById(R.id.preview_mask_view);
+
+    	mMaskView = (MaskView) findViewById(R.id.preview_mask_view);
     	
+
          // Gesture detection
     	/*
         gestureDetector = new GestureDetector(new ScaleListener());
@@ -93,7 +98,7 @@ public class DuchessDroidActivity extends Activity {
             }
         };*/
     	imageView = (ImageView) findViewById(R.id.img);
-
+ 
     }
 
 
@@ -123,7 +128,7 @@ public class DuchessDroidActivity extends Activity {
     public void whenSave(View view) {
         // get an image from the camera
     	try {
-    		PictureWriter mJpegPictureCallback = new PictureWriter(this, mDrawView, imageView);
+    		PictureWriter mJpegPictureCallback = new PictureWriter(this, duchess, imageView);
      		mPreviewView.takePicture(mJpegPictureCallback);
     	    fireSavedAlert();
     	} catch (Exception e) {

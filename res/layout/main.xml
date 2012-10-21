@@ -15,6 +15,11 @@
       android:background="@color/transparent" 
       android:keepScreenOn="true"/>
 
+   <org.duchessfrance.duchessdroid.MaskView android:id="@+id/preview_mask_view" 
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+    android:background="@color/transparent" />
+   
    <ImageView android:id="@+id/img" 
     android:layout_width="400dp" 
     android:layout_height="300dp">
