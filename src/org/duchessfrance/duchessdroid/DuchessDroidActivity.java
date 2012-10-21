@@ -1,7 +1,9 @@
 package org.duchessfrance.duchessdroid;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.hardware.Sensor;
@@ -9,7 +11,12 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 
 public class DuchessDroidActivity extends Activity {
 	private static final String TAG = DuchessDroidActivity.class.getSimpleName();
@@ -21,6 +28,8 @@ public class DuchessDroidActivity extends Activity {
     private static SensorManager sensorManager;
     private OrientationSensorEventListener osel;
     
+    private GestureDetector gestureDetector;
+    private View.OnTouchListener gestureListener;
 
 
 /*    CameraPreview mCameraPreview;
@@ -76,9 +85,22 @@ public class DuchessDroidActivity extends Activity {
 
     	mDrawView = (DrawView) findViewById(R.id.draw_view);
     	mDrawView.duchess = duchess;
-
+    	
     	mPreviewView = (PreviewView) findViewById(R.id.preview_view);
     	mPreviewView.mTargetView = mDrawView;
+    	
+    	
+        // Gesture detection
+    	/*
+        gestureDetector = new GestureDetector(new ScaleListener());
+        gestureListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+            	Log.d(TAG, "received gesture in activity");
+                return gestureDetector.onTouchEvent(event);
+            }
+        };*/
+
+        final Button button = (Button) findViewById(R.id.save_button);
     }
 
 
@@ -95,7 +117,6 @@ public class DuchessDroidActivity extends Activity {
     protected void onPause() {
     	super.onPause();
     	Log.d(TAG, "onPause");
-    	//sensorManager.unregisterListener(this, sensor);
     	sensorManager.unregisterListener(osel);
     }
 
@@ -103,10 +124,40 @@ public class DuchessDroidActivity extends Activity {
     protected void onDestroy() {
     	// TODO Auto-generated method stub
     	super.onDestroy();
-
-    		sensorManager.unregisterListener(osel);
+    	sensorManager.unregisterListener(osel);
     } 
     
+    public void whenSave(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog_saved_message);
+        builder.setTitle(R.string.dialog_saved_title);
+        builder.setNeutralButton(R.string.button_text_ok, 
+        		new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		               // User cancelled the dialog
+		           }
+       });       
+       AlertDialog dialog = builder.create();
+       dialog.show();
+    }
+
+    public void whenScaleDown(View view) {
+    	float currentScale = duchess.getScale();
+    	if (currentScale>2) {
+    		duchess.setScale(currentScale - 1);
+    		mDrawView.invalidate();
+    	}
+    }
+
+    public void whenScaleUp(View view) {
+    	float currentScale = duchess.getScale();
+    	if (currentScale<4) {
+    		duchess.setScale(currentScale + 1);
+    		mDrawView.invalidate();
+    	}
+    }
+
+    // unused
     private void setupSensor() {
     	sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
     	sensorManager.registerListener(osel, 
@@ -116,4 +167,6 @@ public class DuchessDroidActivity extends Activity {
     			sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
     			SensorManager.SENSOR_DELAY_UI); 
     }
+    
+
 }

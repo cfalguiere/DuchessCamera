@@ -9,7 +9,9 @@ import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -20,15 +22,23 @@ public class DrawView extends ImageView {
 	public Duchess duchess;
 	
 	public enum Action {
-	    NONE, ONGOING, MOVING, ROTATING 
+	    NONE, ONGOING, DRAG, ROTATE, ZOOM 
 	};
 	private Action mode = Action.NONE;
+	private float mScaleFactor = 1.0f;
+	//private /*Scale*/GestureDetector mScaleDetector;
+	//private ScaleListener scaleListener;
 
 	public DrawView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-        // make the GamePanel focusable so it can handle events
+        // make the Panel focusable so it can handle events
         setFocusable(true);
         setFocusableInTouchMode(true);
+        
+         // Create our ScaleGestureDetector
+        //scaleListener = new ScaleListener();
+        //mScaleDetector = new /*Scale*/GestureDetector(context, scaleListener);
+ 
 	}
 
 	@Override
@@ -37,23 +47,28 @@ public class DrawView extends ImageView {
 		//Paint paint = new Paint();
 		//mPaint.setColor(Color.WHITE);
 		//canvas.drawText("Test", 0, 50, paint);
+		canvas.scale(mScaleFactor, mScaleFactor);
 
 		duchess.draw(canvas);
 		
 		switch(mode) {
-		case MOVING :
-			drawMovingFeedback(canvas);
+		case DRAG :
+			drawDragFeedback(canvas);
 			break;
-		case ROTATING :
-			drawRotatingFeedback(canvas);
+		case ROTATE :
+			drawRotateFeedback(canvas);
+			break;
+		case ZOOM :
+			drawZoomFeedback(canvas);
 			break;
 		default :
 			break;
 		}
+		
 
 	}
 	
-	private void drawMovingFeedback(Canvas canvas) {
+	private void drawDragFeedback(Canvas canvas) {
 		Paint paint = new Paint();
 		paint.setColor(Color.GREEN);
 		paint.setAlpha(128);
@@ -62,7 +77,7 @@ public class DrawView extends ImageView {
 				radius, paint);
 	}
 	
-	private void drawRotatingFeedback(Canvas canvas) {
+	private void drawRotateFeedback(Canvas canvas) {
 		Paint paint = new Paint();
 		paint.setColor(Color.GREEN);
 		paint.setAlpha(128);
@@ -73,41 +88,61 @@ public class DrawView extends ImageView {
 		canvas.drawCircle(duchess.getX(), duchess.getY(), 
 				radius, paint);
 	}
-	
+
+	private void drawZoomFeedback(Canvas canvas) {
+		Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setAlpha(128);
+		int offset = 20;
+		paint.setStrokeWidth(offset);
+		paint.setStyle(Style.STROKE);
+		int radius = duchess.getBitmap().getWidth() / 2 + offset;
+		canvas.drawCircle(duchess.getX(), duchess.getY(), 
+				radius, paint);
+	}
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            // delegating event handling to the duchess
-            duchess.handleActionDown((int)event.getX(), (int)event.getY());
-        	mode = Action.ONGOING;
-        	Log.d(TAG,"down");
-         } if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            // the gestures
-            if (duchess.isTouched()) {
-            	mode = Action.MOVING;
-                // the duchess was picked up and is being dragged
-            	duchess.setX((int)event.getX());
-            	duchess.setY((int)event.getY());
-            	invalidate();
-                Log.d(TAG,"move");
-           } else {
-        	   mode = Action.ROTATING;
-        	   double angdeg = getDegreesFromTouchEvent(event.getX(), event.getY());
-        	   duchess.setAngdeg(angdeg);
-        	   invalidate();
-        	   Log.d(TAG,"rotate");
-           }
-        } if (event.getAction() == MotionEvent.ACTION_UP) {
-         	Log.d(TAG,"up");
-        	if (mode != Action.NONE) {
-         	   invalidate();
-        	}
-        	mode = Action.NONE;
-        	// touch was released
-        	if (duchess.isTouched()) {
-        		duchess.setTouched(false);
-        	}
-        	
+    	
+    	final int action = event.getAction();
+
+    	switch (action & MotionEvent.ACTION_MASK) {
+    		case MotionEvent.ACTION_DOWN: {
+                // delegating event handling to the duchess
+                duchess.handleActionDown((int)event.getX(), (int)event.getY());
+            	mode = Action.ONGOING;
+            	Log.d(TAG,"down");
+            	break;
+    	    }
+    	    case MotionEvent.ACTION_MOVE: {
+    	    	if (duchess.isTouched()) {
+    	    		mode = Action.DRAG;
+    	    		// the duchess was picked up and is being dragged
+    	    		duchess.setX((int)event.getX());
+    	    		duchess.setY((int)event.getY());
+    	    		invalidate();
+    	    		Log.d(TAG,"move");
+    	    	} else {
+    	    		mode = Action.ROTATE;
+    	    		double angdeg = getDegreesFromTouchEvent(event.getX(), event.getY());
+    	    		duchess.setAngdeg(angdeg);
+    	    		invalidate();
+    	    		Log.d(TAG,"rotate");
+    	    	}
+    	    	break;
+    	    }
+    	    case MotionEvent.ACTION_UP: {
+    	    	Log.d(TAG,"up");
+    	    	if (mode != Action.NONE) {
+    	    		invalidate();
+    	    	}
+    	    	mode = Action.NONE;
+    	    	// touch was released
+    	    	if (duchess.isTouched()) {
+    	    		duchess.setTouched(false);
+    	    	}
+    	    	break;
+    	    }        	
         }
         return true;
     }
@@ -127,11 +162,12 @@ public class DrawView extends ImageView {
 		display.getSize(size);
 		int width = size.x;
 		int height = size.y;
-		//TODO factorize
 		double delta_x = x - (width) /2;
         double delta_y = (height) /2 - y;
         double radians = Math.atan2(delta_y, delta_x);
 
         return Math.toDegrees(radians);
     }
+    
+
 }

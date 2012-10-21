@@ -12,6 +12,23 @@ public class Duchess {
 	private boolean touched;    // if duchess is touched/picked up
 	private float rotation;
 	private double angdeg;
+	private float scale;
+
+	public Duchess(Bitmap bitmap, int x, int y) {
+		this.bitmap = bitmap;
+		this.x = x;
+		this.y = y;
+		this.scale = 1.0f;
+	}
+
+
+	public float getScale() {
+		return scale;
+	}
+
+	public void setScale(float scale) {
+		this.scale = scale;
+	}
 
 	public double getAngdeg() {
 		return angdeg;
@@ -31,12 +48,6 @@ public class Duchess {
 
 	public void setRotation(float rotation) {
 		this.rotation = rotation;
-	}
-
-	public Duchess(Bitmap bitmap, int x, int y) {
-		this.bitmap = bitmap;
-		this.x = x;
-		this.y = y;
 	}
 
 	public Bitmap getBitmap() {
@@ -74,11 +85,15 @@ public class Duchess {
 	public void draw(Canvas canvas) {
 		Log.d(TAG, "redraw duchess with rotation " + rotation);
 		Matrix matrix = new Matrix();
-		matrix.setRotate((float)angdeg /*rotation*/, bitmap.getWidth()/2,
+//		matrix.setRotate((float)angdeg /*rotation*/, bitmap.getWidth()/2,
+//				bitmap.getHeight()/2);
+		matrix.setScale(scale, scale, bitmap.getWidth()/2, bitmap.getHeight()/2);
+		matrix.postRotate((float)angdeg /*rotation*/, bitmap.getWidth()/2,
 				bitmap.getHeight()/2);
 		matrix.postTranslate(x - bitmap.getWidth()/2,
 				y - bitmap.getHeight()/2);
 		canvas.drawBitmap(bitmap, matrix, null /*new Paint()*/);
+		   
 	}
 
 	public void handleActionDown(int eventX, int eventY) {

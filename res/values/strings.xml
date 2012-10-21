@@ -3,5 +3,11 @@
 
     <string name="hello">Hello World, DuchessDroidActivity!</string>
     <string name="app_name">DuchessDroid</string>
-
+    <string name="button_text_save">Save</string>
+    <string name="button_text_ok">OK</string>
+   	<string name="button_text_scale_up">+</string>
+    <string name="button_text_scale_down">-</string>
+    <string name="dialog_saved_title">Duchess Camera</string>
+    <string name="dialog_saved_message">Image saved</string>
+    
 </resources>

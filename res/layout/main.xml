@@ -25,6 +25,35 @@
       android:background="@color/transparent" 
       android:keepScreenOn="true"/>
  
+ 
+       
+   <Button
+      android:id="@+id/save_button"
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+   android:layout_gravity="bottom|right" 
+    android:layout_marginBottom="10dp"
+    android:text="@string/button_text_save"
+     android:onClick="whenSave" />
+   
+   <Button
+      android:id="@+id/scale_up_button"
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+   android:layout_gravity="bottom|right" 
+    android:layout_marginBottom="100dp"
+     android:text="@string/button_text_scale_up"
+     android:onClick="whenScaleUp" />
+   
+      <Button
+      android:id="@+id/scale_down_button"
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+   android:layout_gravity="bottom|right" 
+    android:layout_marginBottom="200dp"
+     android:text="@string/button_text_scale_down"
+     android:onClick="whenScaleDown" />
+   
    <!--   ImageView  
       	android:id="@+id/duchess_view"
         android:layout_width="fill_parent" 
