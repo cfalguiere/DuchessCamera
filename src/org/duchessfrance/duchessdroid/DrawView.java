@@ -25,7 +25,9 @@ public class DrawView extends ImageView {
 	    NONE, ONGOING, DRAG, ROTATE, ZOOM 
 	};
 	private Action mode = Action.NONE;
+
 	private float mScaleFactor = 1.0f;
+	//TODO setup multi touch for scaling - need fix interaction with single touch
 	//private /*Scale*/GestureDetector mScaleDetector;
 	//private ScaleListener scaleListener;
 
@@ -169,5 +171,14 @@ public class DrawView extends ImageView {
         return Math.toDegrees(radians);
     }
     
+    // accessors and mutators
+    
+	public Action getMode() {
+		return mode;
+	}
+
+	public void setMode(Action mode) {
+		this.mode = mode;
+	}
 
 }

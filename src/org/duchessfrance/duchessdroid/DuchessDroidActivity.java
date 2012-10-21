@@ -1,14 +1,31 @@
 package org.duchessfrance.duchessdroid;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.hardware.Camera.PictureCallback;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -17,6 +34,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class DuchessDroidActivity extends Activity {
 	private static final String TAG = DuchessDroidActivity.class.getSimpleName();
@@ -24,39 +42,15 @@ public class DuchessDroidActivity extends Activity {
 	DrawView mDrawView;
 	PreviewView mPreviewView;
 	Duchess duchess;
+    private ImageView imageView;
+
  
     private static SensorManager sensorManager;
     private OrientationSensorEventListener osel;
     
-    private GestureDetector gestureDetector;
-    private View.OnTouchListener gestureListener;
+    //private GestureDetector gestureDetector;
+    //private View.OnTouchListener gestureListener;
 
-
-/*    CameraPreview mCameraPreview;
-
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
-    private Uri fileUri;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-
-        //create new Intent
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);  // create a file to save the video
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);  // set the image file name
-
-        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1); // set the video image quality to high
-
-        // start the Video Capture Intent
-        startActivityForResult(intent, CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE);
-    }
-*/
     
     /** Called when the activity is first created. */
 
@@ -89,8 +83,7 @@ public class DuchessDroidActivity extends Activity {
     	mPreviewView = (PreviewView) findViewById(R.id.preview_view);
     	mPreviewView.mTargetView = mDrawView;
     	
-    	
-        // Gesture detection
+         // Gesture detection
     	/*
         gestureDetector = new GestureDetector(new ScaleListener());
         gestureListener = new View.OnTouchListener() {
@@ -99,6 +92,7 @@ public class DuchessDroidActivity extends Activity {
                 return gestureDetector.onTouchEvent(event);
             }
         };*/
+    	imageView = (ImageView) findViewById(R.id.img);
 
     }
 
@@ -127,19 +121,20 @@ public class DuchessDroidActivity extends Activity {
     } 
     
     public void whenSave(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.dialog_saved_message);
-        builder.setTitle(R.string.dialog_saved_title);
-        builder.setNeutralButton(R.string.button_text_ok, 
-        		new DialogInterface.OnClickListener() {
-		           public void onClick(DialogInterface dialog, int id) {
-		               // User cancelled the dialog
-		           }
-       });       
-       AlertDialog dialog = builder.create();
-       dialog.show();
-    }
+        // get an image from the camera
+    	try {
+    		PictureWriter mJpegPictureCallback = new PictureWriter(this, mDrawView, imageView);
+     		mPreviewView.takePicture(mJpegPictureCallback);
+    	    fireSavedAlert();
+    	} catch (Exception e) {
+    		Log.d(TAG, "could not save picture");
+    	}
+     	
+    	
+     }
 
+
+    
     public void whenScaleDown(View view) {
     	float currentScale = duchess.getScale();
     	if (currentScale>1) {
@@ -157,12 +152,14 @@ public class DuchessDroidActivity extends Activity {
     }
 
     public void whenRotate(View view) {
-//TODO
+    	mDrawView.setMode(DrawView.Action.ROTATE);
+   		mDrawView.invalidate();
     }
 
     public void whenDrag(View view) {
-//TODO
-    }
+    	mDrawView.setMode(DrawView.Action.DRAG);
+   		mDrawView.invalidate();
+   }
 
     // unused
     private void setupSensor() {
@@ -175,5 +172,21 @@ public class DuchessDroidActivity extends Activity {
     			SensorManager.SENSOR_DELAY_UI); 
     }
     
+
+	private void fireSavedAlert() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.dialog_saved_message);
+		builder.setTitle(R.string.dialog_saved_title);
+		builder.setNeutralButton(R.string.button_text_ok, 
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				// User cancelled the dialog
+			}
+		});       
+		AlertDialog dialog = builder.create();
+		dialog.show();
+
+	}
+
 
 }

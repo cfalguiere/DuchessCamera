@@ -6,11 +6,15 @@
 
     <uses-sdk android:minSdkVersion="15" />
 
+    <!--  will use multi-touch -->
+    <!-- TODO need fix interactions with single touch before accepting multi touch to resize
+    uses-feature android:name="android.hardware.touchscreen.multitouch" -->
     <!--  will make use of camera -->
-    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <!--  will make use of camera -->
+    <!--  will make use of storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--  will make use of GPS -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     
     <application

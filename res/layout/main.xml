@@ -14,8 +14,13 @@
       android:layout_height="fill_parent"
       android:background="@color/transparent" 
       android:keepScreenOn="true"/>
- 
-   <ImageView
+
+   <ImageView android:id="@+id/img" 
+    android:layout_width="400dp" 
+    android:layout_height="300dp">
+   </ImageView>
+
+   <ImageView android:id="@+id/button_panel"
        android:layout_width="230dp"
        android:layout_height="50dp"
        android:layout_gravity="bottom|right"
