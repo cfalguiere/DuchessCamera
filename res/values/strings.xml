@@ -9,5 +9,6 @@
     <string name="button_text_scale_down">-</string>
     <string name="dialog_saved_title">Duchess Camera</string>
     <string name="dialog_saved_message">Image saved</string>
+    <string name="acc_background">background</string>
     
 </resources>

@@ -100,7 +100,6 @@ public class DuchessDroidActivity extends Activity {
             }
         };*/
 
-        final Button button = (Button) findViewById(R.id.save_button);
     }
 
 
