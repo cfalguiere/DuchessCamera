@@ -80,7 +80,7 @@ public class DuchessDroidActivity extends Activity {
     	// create duchess and load bitmap
     	duchess = new Duchess(
     			BitmapFactory.decodeResource(getResources(), R.drawable.duchessfr), 
-    			width*2/3, height*2/3); //TODO actual size of the screen
+    			width*1/3, height*2/3); //TODO actual size of the screen
 
 
     	mDrawView = (DrawView) findViewById(R.id.draw_view);
