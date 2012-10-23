@@ -32,9 +32,6 @@ public class DrawView extends ImageView {
 	//private /*Scale*/GestureDetector mScaleDetector;
 	//private ScaleListener scaleListener;
 
-	private Paint dragPaint = new Paint();
-	private Paint rotatePaint = new Paint();
-	private Paint zoomPaint = new Paint();
 	int rotateFeedbackRadius;
 	
 	public DrawView(Context context, AttributeSet attrs) {
@@ -49,20 +46,6 @@ public class DrawView extends ImageView {
  
 	}
 	
-	private void initializePainters() {
-		dragPaint = new Paint();
-		dragPaint.setColor(Color.GREEN);
-		dragPaint.setAlpha(128);
-
-		rotatePaint = new Paint();
-		rotatePaint.setColor(Color.GREEN);
-		rotatePaint.setAlpha(128);
-		int offset = 40;
-		rotatePaint.setStrokeWidth(offset);
-		rotatePaint.setStyle(Style.STROKE);
-		rotateFeedbackRadius = duchess.getBitmap().getWidth() / 2 + offset;
-
-	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
@@ -89,12 +72,24 @@ public class DrawView extends ImageView {
 	}
 	
 	private void drawDragFeedback(Canvas canvas) {
+		Paint dragPaint = new Paint();
+		dragPaint = new Paint();
+		dragPaint.setColor(Color.GREEN);
+		dragPaint.setAlpha(128);
 		int radius = duchess.getBitmap().getWidth() / 4;
 		canvas.drawCircle(duchess.getX(), duchess.getY(), 
 				radius, dragPaint);
 	}
 	
 	private void drawRotateFeedback(Canvas canvas) {
+		Paint rotatePaint = new Paint();
+		rotatePaint = new Paint();
+		rotatePaint.setColor(Color.GREEN);
+		rotatePaint.setAlpha(128);
+		int offset = 40;
+		rotatePaint.setStrokeWidth(offset);
+		rotatePaint.setStyle(Style.STROKE);
+		rotateFeedbackRadius = duchess.getBitmap().getWidth() / 2 + offset;
 		canvas.drawCircle(duchess.getX(), duchess.getY(), 
 				rotateFeedbackRadius, rotatePaint);
 	}

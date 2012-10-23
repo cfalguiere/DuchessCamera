@@ -5,6 +5,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
+import android.view.KeyEvent;
 
 public class OrientationSensorEventListener implements SensorEventListener {
 
@@ -69,6 +70,21 @@ public class OrientationSensorEventListener implements SensorEventListener {
 		activity.mDrawView.invalidate();
 	}
 
-
-
+	// TODO complete
+/*
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_CAMERA) {
+	        if (!mIsPictureTaking) {
+	            this.onClick(null);
+	            return true;
+	        }else{
+	            //ignore buttons while taking pics.
+	            return true;
+	        }
+	    }else{
+	        return super.onKeyDown(keyCode, event);
+	    }
+	}
+	*/
 }

@@ -26,7 +26,9 @@ public class MaskView extends ImageView {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		if (previewSize != null) {
-			canvas.drawRect(previewSize.width, 0, canvas.getWidth(), canvas.getHeight(), mPaint);
+			int offset = (canvas.getWidth() - previewSize.width) / 2;
+			canvas.drawRect(0, 0, offset, canvas.getHeight(), mPaint);
+			canvas.drawRect(canvas.getWidth() - offset, 0, canvas.getWidth(), canvas.getHeight(), mPaint);
 		}
 	}
 

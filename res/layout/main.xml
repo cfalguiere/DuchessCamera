@@ -21,8 +21,8 @@
     android:background="@color/transparent" />
    
    <ImageView android:id="@+id/img" 
-    android:layout_width="400dp" 
-    android:layout_height="300dp">
+    android:layout_width="100dp" 
+    android:layout_height="75dp">
    </ImageView>
 
    <ImageView android:id="@+id/button_panel"

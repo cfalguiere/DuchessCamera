@@ -83,15 +83,14 @@ public class Duchess {
 	}
 
 	public void draw(Canvas canvas, float ratio) {
-		Log.d(TAG, "redraw duchess with rotation " + rotation);
+		Log.d(TAG, "redraw duchess with rotation " + angdeg);
 		Matrix matrix = new Matrix();
-		float s = scale * ratio;
-		int cw = Math.round(bitmap.getWidth() * ratio / 2);
-		int ch = Math.round(bitmap.getHeight() * ratio / 2);
+		float s = scale;
+		int cw = Math.round(bitmap.getWidth() / 2);
+		int ch = Math.round(bitmap.getHeight()  / 2);
 		matrix.setScale(s, s, cw, ch);
 		matrix.postRotate((float)angdeg /*rotation*/, cw, ch);
-		matrix.postTranslate((x - bitmap.getWidth()) * ratio, 
-				(y - bitmap.getHeight()) * ratio);
+		matrix.postTranslate(x - cw, y - ch);
 		canvas.drawBitmap(bitmap, matrix, null /*new Paint()*/);		   
 	}
 

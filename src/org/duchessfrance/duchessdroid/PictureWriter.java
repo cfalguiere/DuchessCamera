@@ -91,6 +91,7 @@ public class PictureWriter implements PictureCallback {
 
 		mResultView.setImageBitmap(bitmap);
 		mResultView.invalidate();
+		//TODO custom view to handle the on touch to close view or animate the move in gallery
 
 	}
 

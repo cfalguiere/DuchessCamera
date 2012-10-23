@@ -2,8 +2,12 @@ package org.duchessfrance.duchessdroid;
 	
 
 import java.io.IOException;
+import java.util.List;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
@@ -11,6 +15,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 
 // TODO
 /*
@@ -77,9 +83,13 @@ public class PreviewView extends SurfaceView implements SurfaceHolder.Callback{
 		// restart camera preview
 		Camera.Parameters parameters = mCamera.getParameters();
 		Size p = mCamera.getParameters().getPreviewSize();
-		mMaskView.setPreviewSize(p);
-		mMaskView.invalidate();
-		//drawMask(holder, p, w, h);
+		//mMaskView.setPreviewSize(p);
+		//mMaskView.invalidate();
+		//int offset = (w - p.width) / 2;
+		//Log.d(TAG, "offset for preview is " + offset);
+		//setPadding(0,offset,0,offset);
+		//requestLayout();
+		
 
 		// work fine for display but captured image is not rotated 
 		// and also lags when rotating device*/
@@ -110,7 +120,15 @@ public class PreviewView extends SurfaceView implements SurfaceHolder.Callback{
 
 
 		mTargetView.invalidate();
+		List<Size> size = parameters.getSupportedPreviewSizes();
+        parameters.setPreviewSize(size.get(0).width, size.get(0).height);
 		mCamera.setParameters(parameters);
+		
+	      FrameLayout.LayoutParams frameParams = (FrameLayout.LayoutParams) this.getLayoutParams();
+	      frameParams.width = LayoutParams.MATCH_PARENT;// dm.widthPixels should also work
+	      frameParams.height = LayoutParams.MATCH_PARENT;//dm.heightPixels should also work
+	      this.setLayoutParams(frameParams);
+
 		previewCamera();
 	}
 	
@@ -127,22 +145,8 @@ public class PreviewView extends SurfaceView implements SurfaceHolder.Callback{
 	        Log.d(TAG, "Cannot start preview", e);    
 	    }
 	}
-/*
-	private void drawMask(SurfaceHolder holder, Size photoSize, int w, int h) {
-		if(holder.getSurface().isValid()){
-			Canvas canvas = holder.lockCanvas();
-			if (canvas!=null) {
-				Paint maskPaint = new Paint();
-				maskPaint.setColor(Color.rgb(0, 0, 0));
-				canvas.drawRect(photoSize.width, 0, w-photoSize.width, h, maskPaint);
-			}
 
-			holder.unlockCanvasAndPost(canvas);
-		}
 
-	}
-
-*/
 	
 	public void takePicture(PictureCallback mJpegPictureCallback) {
 		mCamera.takePicture(null, null, mJpegPictureCallback);
