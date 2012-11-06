@@ -32,22 +32,22 @@
        android:layout_gravity="top|right" />
    
 
-   <ImageView android:id="@+id/button_panel"
+   <!-- ImageView android:id="@+id/button_panel"
        android:layout_width="230dp"
        android:layout_height="50dp"
        android:layout_gravity="bottom|right"
        android:layout_marginRight="-20dp"
        android:layout_marginBottom="-10dp"
        android:background="@drawable/button_panel_bg" 
-       android:contentDescription="@string/acc_background"/>
+       android:contentDescription="@string/acc_background"/ -->
 
    <Button
         android:id="@+id/save_button"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="bottom|right"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/camera_icon_s"
         android:onClick="whenSave" />
 
@@ -57,8 +57,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="bottom|right"
-        android:layout_marginRight="45dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="45dp"
         android:background="@drawable/plus_icon_s"
         android:onClick="whenScaleUp" />
 
@@ -67,8 +67,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="bottom|right"
-        android:layout_marginRight="85dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="85dp"
         android:background="@drawable/minus_icon"
         android:onClick="whenScaleDown" />
 
@@ -77,8 +77,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="bottom|right"
-        android:layout_marginRight="125dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="125dp"
         android:background="@drawable/drag_icon"
         android:onClick="whenDrag" />
 
@@ -87,8 +87,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="bottom|right"
-        android:layout_marginRight="165dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="165dp"
         android:background="@drawable/rotate_icon"
         android:onClick="whenRotate" />
     
