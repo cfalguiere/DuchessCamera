@@ -91,6 +91,7 @@ public class Duchess {
 		matrix.setScale(s, s, cw, ch);
 		matrix.postRotate((float)angdeg /*rotation*/, cw, ch);
 		matrix.postTranslate(x - cw, y - ch);
+		matrix.postScale(ratio, ratio);
 		canvas.drawBitmap(bitmap, matrix, null /*new Paint()*/);		   
 	}
 

@@ -3,6 +3,10 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent">
 
+    <FrameLayout android:id="@+id/camera_frame"
+        android:layout_width="4dp"
+        android:layout_height="3dp" >
+        
    <org.duchessfrance.duchessdroid.PreviewView android:id="@+id/preview_view"
                android:layout_width="fill_parent"
                android:layout_height="fill_parent"
@@ -14,16 +18,19 @@
       android:layout_height="fill_parent"
       android:background="@color/transparent" 
       android:keepScreenOn="true"/>
+   
+   </FrameLayout>
 
    <org.duchessfrance.duchessdroid.MaskView android:id="@+id/preview_mask_view" 
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
     android:background="@color/transparent" />
+
+    <ImageView android:id="@+id/img" 
+      android:layout_width="100dp" 
+    android:layout_height="75dp" 
+       android:layout_gravity="top|right" />
    
-   <ImageView android:id="@+id/img" 
-    android:layout_width="100dp" 
-    android:layout_height="75dp">
-   </ImageView>
 
    <ImageView android:id="@+id/button_panel"
        android:layout_width="230dp"

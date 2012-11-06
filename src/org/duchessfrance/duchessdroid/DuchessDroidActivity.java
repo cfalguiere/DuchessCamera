@@ -9,31 +9,22 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.hardware.Camera.PictureCallback;
-import android.net.Uri;
+import android.hardware.Camera.Size;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 public class DuchessDroidActivity extends Activity {
@@ -71,19 +62,49 @@ public class DuchessDroidActivity extends Activity {
     	int height = size.y;
     	
     	setupSensor();
-    	
+
+    	//TODO move to context
+		DisplayMetrics metrics = new DisplayMetrics();
+		((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+		  .getDefaultDisplay().getMetrics(metrics);
+		int screenHeightPixels = metrics.heightPixels;
+		int screenWidthPixels = metrics.widthPixels;
+
+		Camera camera = Camera.open();
+		Camera.Parameters parameters = camera.getParameters();
+		Size photoSize = parameters.getPreviewSize();
+		int photoWidth = photoSize.width;
+		int photoHeight = photoSize.height;
+
+		float xScale = ((float) screenWidthPixels) / photoWidth;
+	    float yScale = ((float) screenHeightPixels) / photoHeight;
+	    float scale = (xScale <= yScale) ? xScale : yScale;
+
+
+      // Now change Frame dimensions to match the scaled image
+	    
+    	FrameLayout frame = (FrameLayout) findViewById(R.id.camera_frame);
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) frame.getLayoutParams();
+        params.width = Math.round(photoWidth * scale);
+        params.height = Math.round(photoHeight * scale);;
+        frame.setLayoutParams(params);
+
     	// create duchess and load bitmap
     	duchess = new Duchess(
     			BitmapFactory.decodeResource(getResources(), R.drawable.duchessfr), 
-    			width*1/3, height*2/3); //TODO actual size of the screen
+    			width*1/3, height*2/3); 
 
-
+		// Draw Duchess view
+        
     	mDrawView = (DrawView) findViewById(R.id.draw_view);
     	mDrawView.duchess = duchess;
     	
     	mPreviewView = (PreviewView) findViewById(R.id.preview_view);
     	mPreviewView.mTargetView = mDrawView;
+    	mPreviewView.mCamera = camera;
     	mPreviewView.mMaskView  = (MaskView) findViewById(R.id.preview_mask_view);
+
+
 
     	mMaskView = (MaskView) findViewById(R.id.preview_mask_view);
     	

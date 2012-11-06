@@ -12,9 +12,11 @@ import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 
@@ -26,7 +28,7 @@ public class PreviewView extends SurfaceView implements SurfaceHolder.Callback{
 	private static final String TAG = PreviewView.class.getSimpleName();
 
 	SurfaceHolder mHolder;
-	Camera mCamera;
+	public Camera mCamera; //TODO move in context
 
 	boolean mIsPreviewRunning = false;
 	public  boolean isScanning = false;
@@ -49,7 +51,6 @@ public class PreviewView extends SurfaceView implements SurfaceHolder.Callback{
 
 
 	public void surfaceCreated(SurfaceHolder holder) {
-		mCamera = Camera.open();
 		try {
 			mCamera.setPreviewDisplay(holder);
 			mIsPreviewRunning=true;
@@ -123,11 +124,12 @@ public class PreviewView extends SurfaceView implements SurfaceHolder.Callback{
 		List<Size> size = parameters.getSupportedPreviewSizes();
         parameters.setPreviewSize(size.get(0).width, size.get(0).height);
 		mCamera.setParameters(parameters);
-		
+		/*
 	      FrameLayout.LayoutParams frameParams = (FrameLayout.LayoutParams) this.getLayoutParams();
 	      frameParams.width = LayoutParams.MATCH_PARENT;// dm.widthPixels should also work
 	      frameParams.height = LayoutParams.MATCH_PARENT;//dm.heightPixels should also work
 	      this.setLayoutParams(frameParams);
+*/
 
 		previewCamera();
 	}
