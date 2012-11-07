@@ -150,8 +150,8 @@ public class PreviewView extends SurfaceView implements SurfaceHolder.Callback{
 
 
 	
-	public void takePicture(PictureCallback mJpegPictureCallback) {
-		mCamera.takePicture(null, null, mJpegPictureCallback);
+	public void takePicture(Camera.ShutterCallback shutterCallback, PictureCallback mJpegPictureCallback) {
+		mCamera.takePicture(shutterCallback, null, mJpegPictureCallback);
 	}
 
 }

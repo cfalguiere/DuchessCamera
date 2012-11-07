@@ -17,6 +17,9 @@ import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.Camera.Size;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -26,7 +29,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.media.SoundPool;
 
+// https://github.com/commonsguy/cw-advandroid/blob/master/Camera/Picture/src/com/commonsware/android/picture/PictureDemo.java
+// http://www.java2s.com/Open-Source/Android/android-platform-apps/Camera/com/android/camera/Camera.java.htm
 public class DuchessDroidActivity extends Activity {
 	private static final String TAG = DuchessDroidActivity.class.getSimpleName();
 
@@ -35,8 +41,10 @@ public class DuchessDroidActivity extends Activity {
 	MaskView mMaskView;
 	Duchess duchess;
     private ImageView imageView;
-
- 
+    
+    private SoundPool mSoundPool;
+    private int mShutterSound;
+    
     private static SensorManager sensorManager;
     private OrientationSensorEventListener osel;
     
@@ -50,6 +58,9 @@ public class DuchessDroidActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
 
+    	mSoundPool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 0);
+    	mShutterSound = mSoundPool.load(this, R.raw.camera_click, 1);
+    	
     	Log.d(TAG, "Entering onCreate");
     	requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -150,9 +161,17 @@ public class DuchessDroidActivity extends Activity {
         // get an image from the camera
     	try {
     		PictureWriter mJpegPictureCallback = new PictureWriter(this, duchess, imageView);
-     		mPreviewView.takePicture(mJpegPictureCallback);
+    		Camera.ShutterCallback shutterCallback = new Camera.ShutterCallback() {
+				
+				public void onShutter() {
+					// TODO Auto-generated method stub
+					mSoundPool.play(mShutterSound, 1f, 1f, 1, 0, 1);
+				}
+			};
+     		mPreviewView.takePicture(shutterCallback, mJpegPictureCallback);
     	    fireSavedAlert();
-    	} catch (Exception e) {
+ 
+     	} catch (Exception e) {
     		Log.d(TAG, "could not save picture");
     	}
      	
