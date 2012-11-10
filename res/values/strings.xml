@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, DuchessDroidActivity!</string>
-    <string name="app_name">DuchessDroid</string>
+    <string name="hello">Hello World, DuchessCameraActivity!</string>
+    <string name="app_name">DuchessCamera</string>
     <string name="button_text_save">Save</string>
     <string name="button_text_ok">OK</string>
    	<string name="button_text_scale_up">+</string>

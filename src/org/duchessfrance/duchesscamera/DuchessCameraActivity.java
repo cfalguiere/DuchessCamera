@@ -1,4 +1,4 @@
-package org.duchessfrance.duchessdroid;
+package org.duchessfrance.duchesscamera;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.duchessfrance.duchesscamera.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -33,8 +35,8 @@ import android.media.SoundPool;
 
 // https://github.com/commonsguy/cw-advandroid/blob/master/Camera/Picture/src/com/commonsware/android/picture/PictureDemo.java
 // http://www.java2s.com/Open-Source/Android/android-platform-apps/Camera/com/android/camera/Camera.java.htm
-public class DuchessDroidActivity extends Activity {
-	private static final String TAG = DuchessDroidActivity.class.getSimpleName();
+public class DuchessCameraActivity extends Activity {
+	private static final String TAG = DuchessCameraActivity.class.getSimpleName();
 
 	DrawView mDrawView;
 	PreviewView mPreviewView;

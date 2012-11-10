@@ -1,4 +1,4 @@
-package org.duchessfrance.duchessdroid;
+package org.duchessfrance.duchesscamera;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

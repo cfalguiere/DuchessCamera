@@ -1,4 +1,4 @@
-package org.duchessfrance.duchessdroid;
+package org.duchessfrance.duchesscamera;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -11,7 +11,7 @@ public class OrientationSensorEventListener implements SensorEventListener {
 
     private static final String TAG = OrientationSensorEventListener.class.getSimpleName();
 
-    DuchessDroidActivity activity;
+    DuchessCameraActivity activity;
     
     private float mAzimuth; 
     private float[] mGravs = new float[3]; 
@@ -20,7 +20,7 @@ public class OrientationSensorEventListener implements SensorEventListener {
     private float[] mRotationM = new float[9];    //9           // Use [16] to co-operate with android.opengl.Matrix 
     private float[] mRemapedRotationM = new float[9]; 
 
-	public OrientationSensorEventListener(DuchessDroidActivity pActivity){
+	public OrientationSensorEventListener(DuchessCameraActivity pActivity){
 		activity = pActivity;
 	}
 

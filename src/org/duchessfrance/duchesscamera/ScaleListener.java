@@ -1,4 +1,4 @@
-package org.duchessfrance.duchessdroid;
+package org.duchessfrance.duchesscamera;
 
 import android.util.Log;
 import android.view.GestureDetector;

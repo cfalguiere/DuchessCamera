@@ -7,12 +7,12 @@
         android:layout_width="4dp"
         android:layout_height="3dp" >
         
-   <org.duchessfrance.duchessdroid.PreviewView android:id="@+id/preview_view"
+   <org.duchessfrance.duchesscamera.PreviewView android:id="@+id/preview_view"
                android:layout_width="fill_parent"
                android:layout_height="fill_parent"
                android:keepScreenOn="true" />
 
-   <org.duchessfrance.duchessdroid.DrawView
+   <org.duchessfrance.duchesscamera.DrawView
       android:id="@+id/draw_view"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
@@ -21,7 +21,7 @@
    
    </FrameLayout>
 
-   <org.duchessfrance.duchessdroid.MaskView android:id="@+id/preview_mask_view" 
+   <org.duchessfrance.duchesscamera.MaskView android:id="@+id/preview_mask_view" 
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
     android:background="@color/transparent" />
