@@ -102,7 +102,7 @@ public class DuchessDroidActivity extends Activity {
 
     	// create duchess and load bitmap
     	duchess = new Duchess(
-    			BitmapFactory.decodeResource(getResources(), R.drawable.duchessfr), 
+    			BitmapFactory.decodeResource(getResources(), R.drawable.duchessfr_shadow), 
     			width*1/3, height*2/3); 
 
 		// Draw Duchess view
@@ -182,8 +182,8 @@ public class DuchessDroidActivity extends Activity {
     
     public void whenScaleDown(View view) {
     	float currentScale = duchess.getScale();
-    	if (currentScale>1) {
-    		duchess.setScale(currentScale - 0.5f);
+    	if (currentScale>0.5) {
+    		duchess.setScale(currentScale - 0.25f);
     		mDrawView.invalidate();
     	}
     }

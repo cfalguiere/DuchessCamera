@@ -76,7 +76,7 @@ public class DrawView extends ImageView {
 		dragPaint = new Paint();
 		dragPaint.setColor(Color.GREEN);
 		dragPaint.setAlpha(128);
-		int radius = duchess.getBitmap().getWidth() / 4;
+		int radius = Math.round(duchess.getBitmap().getWidth() / duchess.getBitmapScale() / 4);
 		canvas.drawCircle(duchess.getX(), duchess.getY(), 
 				radius, dragPaint);
 	}
@@ -89,7 +89,7 @@ public class DrawView extends ImageView {
 		int offset = 40;
 		rotatePaint.setStrokeWidth(offset);
 		rotatePaint.setStyle(Style.STROKE);
-		rotateFeedbackRadius = duchess.getBitmap().getWidth() / 2 + offset;
+		rotateFeedbackRadius = Math.round(duchess.getBitmap().getWidth() / duchess.getBitmapScale() / 2) + offset;
 		canvas.drawCircle(duchess.getX(), duchess.getY(), 
 				rotateFeedbackRadius, rotatePaint);
 	}
